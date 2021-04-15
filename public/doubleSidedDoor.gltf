@@ -1,0 +1,246 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC3",
+      "max": [
+        0.13180847465991974,
+        2.8369884490966797,
+        0.62275111675262451
+      ],
+      "min": [
+        -0.13180908560752869,
+        0.048054203391075134,
+        -0.62275111675262451
+      ]
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC3",
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ]
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC4",
+      "max": [
+        1.0,
+        1.0,
+        0.57170414924621582,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -0.999796450138092,
+        -1.0
+      ]
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC2",
+      "max": [
+        0.9474937915802002,
+        0.992887020111084
+      ],
+      "min": [
+        0.005468413233757019,
+        0.0036622434854507446
+      ]
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5125,
+      "count": 720,
+      "type": "SCALAR",
+      "max": [
+        191.0
+      ],
+      "min": [
+        0.0
+      ]
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5125,
+      "count": 480,
+      "type": "SCALAR",
+      "max": [
+        435.0
+      ],
+      "min": [
+        192.0
+      ]
+    }
+  ],
+  "asset": {
+    "generator": "Plattar UnityGLTF (2019.4.13f1)",
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "doubleSidedDoor.bin",
+      "byteLength": 25728
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 5232
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 5232,
+      "byteLength": 5232
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 10464,
+      "byteLength": 6976
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 17440,
+      "byteLength": 3488
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 20928,
+      "byteLength": 2880
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 23808,
+      "byteLength": 1920
+    }
+  ],
+  "images": [
+    {
+      "uri": "doubleSidedDoor_1001_Normal.png",
+      "name": "doubleSidedDoor_1001_Normal"
+    },
+    {
+      "uri": "doubleSidedDoor_1001_AlbedoTransparency.jpg",
+      "name": "doubleSidedDoor_1001_AlbedoTransparency"
+    },
+    {
+      "uri": "doubleSidedDoor_1001_MetallicSmoothness.png",
+      "name": "doubleSidedDoor_1001_MetallicSmoothness"
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5,
+          0.5,
+          0.5,
+          1.0
+        ],
+        "metallicFactor": 0.0
+      },
+      "name": "lambert1"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.99,
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 0
+      },
+      "name": "doubleSidedDoor"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 5,
+          "material": 1
+        }
+      ],
+      "name": "doubleSidedDoor"
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "name": "doubleSidedDoor"
+    }
+  ],
+  "samplers": [
+    {
+      "minFilter": 9729
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ],
+      "name": "doubleSidedDoor"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "doubleSidedDoor_1001_Normal"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "doubleSidedDoor_1001_AlbedoTransparency"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "doubleSidedDoor_1001_MetallicSmoothness"
+    }
+  ]
+}

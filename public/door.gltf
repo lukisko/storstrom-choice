@@ -1,0 +1,206 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC3",
+      "max": [
+        0.13180847465991974,
+        2.8369884490966797,
+        0.62275111675262451
+      ],
+      "min": [
+        -0.13180908560752869,
+        0.048054203391075134,
+        -0.62275111675262451
+      ]
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC3",
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ]
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC4",
+      "max": [
+        1.0,
+        0.99999749660491943,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -0.95211118459701538,
+        -1.0
+      ]
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC2",
+      "max": [
+        0.99620020389556885,
+        0.99738931655883789
+      ],
+      "min": [
+        0.18166136741638184,
+        0.67154157161712646
+      ]
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5121,
+      "count": 720,
+      "type": "SCALAR",
+      "max": [
+        191.0
+      ],
+      "min": [
+        0.0
+      ]
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5123,
+      "count": 480,
+      "type": "SCALAR",
+      "max": [
+        435.0
+      ],
+      "min": [
+        192.0
+      ]
+    }
+  ],
+  "asset": {
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "door.bin",
+      "byteLength": 22608
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 5232
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 5232,
+      "byteLength": 5232
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 10464,
+      "byteLength": 6976
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 17440,
+      "byteLength": 3488
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 20928,
+      "byteLength": 720
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 21648,
+      "byteLength": 960
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5,
+          0.5,
+          0.5,
+          1.0
+        ],
+        "metallicFactor": 0.0
+      },
+      "name": "lambert1"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5,
+          0.5,
+          0.5,
+          1.0
+        ],
+        "metallicFactor": 0.0
+      },
+      "name": "pasted__lambert4"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 5,
+          "material": 1
+        }
+      ],
+      "name": "door"
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "name": "door"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ],
+      "name": "door"
+    }
+  ]
+}

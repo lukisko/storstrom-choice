@@ -1,0 +1,206 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 213,
+      "type": "VEC3",
+      "max": [
+        0.12670592963695526,
+        3.0160839557647705,
+        0.82038909196853638
+      ],
+      "min": [
+        -0.12670715153217316,
+        -0.016045143827795982,
+        -0.82038909196853638
+      ]
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 213,
+      "type": "VEC3",
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ]
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 213,
+      "type": "VEC4",
+      "max": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0,
+        1.0
+      ]
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 213,
+      "type": "VEC2",
+      "max": [
+        0.86618983745574951,
+        0.6999782919883728
+      ],
+      "min": [
+        0.0023111719638109207,
+        0.002066493034362793
+      ]
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5121,
+      "count": 54,
+      "type": "SCALAR",
+      "max": [
+        31.0
+      ],
+      "min": [
+        0.0
+      ]
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5121,
+      "count": 444,
+      "type": "SCALAR",
+      "max": [
+        212.0
+      ],
+      "min": [
+        32.0
+      ]
+    }
+  ],
+  "asset": {
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "doorFrame.bin",
+      "byteLength": 10722
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 2556
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 2556,
+      "byteLength": 2556
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 5112,
+      "byteLength": 3408
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 8520,
+      "byteLength": 1704
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 10224,
+      "byteLength": 54
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 10278,
+      "byteLength": 444
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5,
+          0.5,
+          0.5,
+          1.0
+        ],
+        "metallicFactor": 0.0
+      },
+      "name": "lambert1"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5,
+          0.5,
+          0.5,
+          1.0
+        ],
+        "metallicFactor": 0.0
+      },
+      "name": "pasted__lambert4"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 5,
+          "material": 1
+        }
+      ],
+      "name": "doorFrame"
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "name": "doorFrame"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ],
+      "name": "doorFrame"
+    }
+  ]
+}

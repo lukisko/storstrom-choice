@@ -1,0 +1,205 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 956,
+      "type": "VEC3",
+      "max": [
+        1.8083466291427612,
+        2.6930809020996094,
+        0.60255974531173706
+      ],
+      "min": [
+        -1.8083466291427612,
+        0.0,
+        -0.60255974531173706
+      ]
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 956,
+      "type": "VEC3",
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ]
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 956,
+      "type": "VEC4",
+      "max": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0
+      ]
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 956,
+      "type": "VEC2",
+      "max": [
+        0.98205471038818359,
+        0.999142050743103
+      ],
+      "min": [
+        0.005826413631439209,
+        0.0042322874069213867
+      ]
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5123,
+      "count": 2712,
+      "type": "SCALAR",
+      "max": [
+        955.0
+      ],
+      "min": [
+        0.0
+      ]
+    }
+  ],
+  "asset": {
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "wordboard_mdl_01.bin",
+      "byteLength": 51312
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 11472
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 11472,
+      "byteLength": 11472
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 22944,
+      "byteLength": 15296
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 38240,
+      "byteLength": 7648
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 45888,
+      "byteLength": 5424
+    }
+  ],
+  "images": [
+    {
+      "uri": "wordboard_mdl_01_1001_Normal.png",
+      "name": "wordboard_mdl_01_1001_Normal"
+    },
+    {
+      "uri": "wordboard_mdl_01_1001_AlbedoTransparency.png",
+      "name": "wordboard_mdl_01_1001_AlbedoTransparency"
+    },
+    {
+      "uri": "wordboard_mdl_01_1001_MetallicSmoothness.png",
+      "name": "wordboard_mdl_01_1001_MetallicSmoothness"
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.5,
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 0
+      },
+      "name": "wordBoard"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0
+        }
+      ],
+      "name": "wordboard_mdl_01"
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "name": "wordboard_mdl_01"
+    }
+  ],
+  "samplers": [
+    {}
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ],
+      "name": "wordboard_mdl_01"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "wordboard_mdl_01_1001_Normal"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "wordboard_mdl_01_1001_AlbedoTransparency"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "wordboard_mdl_01_1001_MetallicSmoothness"
+    }
+  ]
+}
