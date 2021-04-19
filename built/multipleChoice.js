@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const MRE = __importStar(require("@microsoft/mixed-reality-extension-sdk"));
+const charPerM = 17;
 class MultipleChoice {
     //private usersAnsweredGlobal: MRE.Guid[][];
     constructor(context, assets, centerPosition, prop, centerRotation = { x: 0, y: 0, z: 0, w: 1 }) {
@@ -38,13 +39,17 @@ class MultipleChoice {
         this.answersFromUsers = [null, null, null, null, null, null];
         //this.creatIt(prop);
         const questions = [
+            "Enter your question", "Enter your question", "Enter your question",
+            "Enter your question", "Enter your question", "Enter your question"
+        ];
+        /*[
             "Was the Soviet Union part of the Allied forces?",
             "Did America liberate France during WWII?",
             "Was China part of the Pearl Harbor Attack?",
             "Did Hitler get executed?",
             "Did Hitler’s nephew write a magazine article title \n‘Why I hate my Uncle’?",
             "The term “D-Day” refers to the invasion of Normandy \nthe 6 June 1944?",
-        ];
+        ];*/
         this.correct = [
             1, 2, 2, 2, 1, 1
         ];
@@ -265,8 +270,10 @@ class MultipleChoice {
             }
             stringToReturn += text.substring(stringToReturn.length, j) + "\n";
         }
-        stringToReturn += text.substring(stringToReturn.length);
+        stringToReturn += text.substring(stringToReturn.length, maxWidth * maxLines * charPerM);
         return stringToReturn;
+        //stringToReturn+= text.substring(stringToReturn.length);
+        //return stringToReturn;
     }
     creatIt(prop, questionPosition, j) {
         const usersAnsweredLocal = [];

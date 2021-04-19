@@ -12,6 +12,8 @@ export type MultipleChoiceProp = {
 	rowHeight: number;
 }
 
+const charPerM = 17;
+
 export default class MultipleChoice {
 	private assets: MRE.AssetContainer;
 	private context: MRE.Context;
@@ -46,13 +48,17 @@ export default class MultipleChoice {
 		this.answersFromUsers = [null,null,null,null,null,null];
 		//this.creatIt(prop);
 		const questions = [
+			"Enter your question","Enter your question","Enter your question",
+			"Enter your question","Enter your question","Enter your question"
+		]
+		/*[
 			"Was the Soviet Union part of the Allied forces?",
 			"Did America liberate France during WWII?",
 			"Was China part of the Pearl Harbor Attack?",
 			"Did Hitler get executed?",
 			"Did Hitler’s nephew write a magazine article title \n‘Why I hate my Uncle’?",
 			"The term “D-Day” refers to the invasion of Normandy \nthe 6 June 1944?",
-		];
+		];*/
 		this.correct = [
 			1,2,2,2,1,1
 		];
@@ -293,8 +299,10 @@ export default class MultipleChoice {
 			}
 			stringToReturn += text.substring(stringToReturn.length,j) + "\n";
 		}
-		stringToReturn+= text.substring(stringToReturn.length);
+		stringToReturn+= text.substring(stringToReturn.length,maxWidth*maxLines*charPerM);
 		return stringToReturn;
+		//stringToReturn+= text.substring(stringToReturn.length);
+		//return stringToReturn;
 	}
 
 	private creatIt(prop: MultipleChoiceProp, questionPosition: MRE.Vector3Like,j: number) {
