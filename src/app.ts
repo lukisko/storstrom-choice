@@ -1,4 +1,4 @@
-	import * as MRE from '@microsoft/mixed-reality-extension-sdk';
+import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 //import groupMask from './groupMask';
 //import Board from './interactiveBoard';
 //import WearHat from "./wearHat";
@@ -25,18 +25,11 @@ export default class LearningWorld {
 		/*this.wearHat = new WearHat(this.context, this.assets,
 			{ x: 0, y: 0, z: -3 }, { x: 0, y: 0, z: 0, w: 1 }, this.usersTrack);*/
 		this.context.onStarted(() => {
-			
+
 			this.started();
 			//this.starSystem.start();
 		});
-		/*this.context.onUserJoined((user) => {
-			try{
-				this.board.addButton();
-			} catch (err){
-				//do nothing
-			}
-			
-		});/*
+		/*
 		this.context.onUserLeft((user) => {
 			this.starSystem.userLeft(user);
 		});*/
@@ -51,14 +44,22 @@ export default class LearningWorld {
 		}
 		const choice = new MultipleChoice(this.context, this.assets,
 			{ x: 0, y: 1, z: 1 }, multipleChoiceProp);
+		this.context.onUserJoined((user) => {
+			try {
+				choice.remakeButtons(user);
+			} catch (err) {
+				//do nothing
+			}
+
+		});
 		//this.board = new Board(this.context, this.assets, { x: 0, y: 0, z: 0 });
 
 	}
 
 	private started() {
-		
+
 		//console.log("everithing has started--------------");
-		
+
 		/*const textureFromWeb = await this.assets.createTexture("web texture",{
 			uri:"https://upload.wikimedia.org/wikipedia/commons/3/31/Wiki_logo_Nupedia.jpg"
 		});

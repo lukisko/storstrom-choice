@@ -24,6 +24,8 @@ const charPerM = 17;
 class MultipleChoice {
     //private usersAnsweredGlobal: MRE.Guid[][];
     constructor(context, assets, centerPosition, prop, centerRotation = { x: 0, y: 0, z: 0, w: 1 }) {
+        this.groupName = "PARTICIPANT";
+        this.noGroupName = "NOT-PARTICIPANT";
         this.context = context;
         this.assets = assets;
         this.centerPosition = centerPosition;
@@ -31,6 +33,9 @@ class MultipleChoice {
         this.usersAnswered = [];
         //this.usersAnsweredGlobal = [[],[],[],[],[],[]];
         this.isClosed = true;
+        this.participants = [];
+        this.participantMask = new MRE.GroupMask(context, [this.groupName]);
+        this.notParticipandMask = new MRE.GroupMask(context, [this.noGroupName]);
         /*this.door = new Door(this.context, this.assets, {
             x: this.centerPosition.x + 8.285-1,
             y: this.centerPosition.y - 1,
@@ -53,6 +58,18 @@ class MultipleChoice {
         this.correct = [
             1, 2, 2, 2, 1, 1
         ];
+        this.questionActors = [];
+        this.answerActors = [];
+        this.answerFunction = [];
+        this.globalProp = prop;
+        this.nextPropG = {
+            numberOfOptions: 2,
+            padding: prop.padding,
+            columns: 2,
+            height: prop.height,
+            width: prop.width,
+            rowHeight: prop.rowHeight
+        };
         this.createQuestions(questions, this.correct, prop);
     }
     async createQuestions(questions, correct, prop) {
@@ -160,7 +177,6 @@ class MultipleChoice {
                 }
             }
         });
-        let extraLines = 0;
         for (let i = 0; i < questions.length; i++) {
             const tempX = this.centerPosition.x;
             const tempY = this.centerPosition.y - (i) * //(prop.height + prop.padding) - extraLines*prop.height
@@ -207,9 +223,7 @@ class MultipleChoice {
                     }
                 }
             });
-            if (questions[i].length > 60) {
-                extraLines++;
-            }
+            this.questionActors.push(question);
             const nextProp = {
                 numberOfOptions: 2,
                 padding: prop.padding,
@@ -222,37 +236,7 @@ class MultipleChoice {
             this.creatIt(nextProp, { x: tempX + 2.1, y: tempY, z: tempZ }, i);
             const questionButton = question.setBehavior(MRE.ButtonBehavior);
             questionButton.onClick((user) => {
-                if (user.properties['altspacevr-roles'] !== "") {
-                    user.prompt("Enter your question", true)
-                        .then((value) => {
-                        if (value.submitted) {
-                            const newQuestion = value.text;
-                            user.prompt("What is the answer? Yes/No?", true)
-                                .then((value2) => {
-                                if (value2.submitted) {
-                                    if (/[Yy]es/u.test(value2.text)) {
-                                        this.correct[i] = 1;
-                                    }
-                                    else if (/[Nn]o/u.test(value2.text)) {
-                                        this.correct[i] = 2;
-                                    }
-                                    question.enableText({
-                                        contents: this.formatText(newQuestion, (3.4), 2),
-                                        height: prop.height,
-                                    });
-                                    //this.usersAnsweredGlobal = [[],[],[],[],[],[]];
-                                    this.answersFromUsers.map((object) => {
-                                        if (object) {
-                                            object.destroy();
-                                        }
-                                    });
-                                    this.usersAnswered = [];
-                                    this.answersFromUsers = [null, null, null, null, null, null];
-                                }
-                            });
-                        }
-                    });
-                }
+                this.handleQuestionButton(user, question, i);
             });
         }
     }
@@ -277,9 +261,9 @@ class MultipleChoice {
     }
     creatIt(prop, questionPosition, j) {
         const usersAnsweredLocal = [];
-        const textureTry = this.assets.createTexture("sunglases", {
-            uri: "2-2-sunglasses-picture.png",
-        });
+        //const textureTry = this.assets.createTexture("sunglases",{
+        //	uri:"2-2-sunglasses-picture.png",
+        //});
         const transparent = this.assets.createMaterial("transparent", {
             color: { r: 0.2, g: 0.2, b: 0, a: 0.2 },
         });
@@ -341,46 +325,85 @@ class MultipleChoice {
                     }
                 }
             });
+            this.answerActors.push(option);
+            const answerFunction = () => { this.handleAnswerButton(i, j, option); };
+            this.answerFunction.push(answerFunction);
             const optionButton = option.setBehavior(MRE.ButtonBehavior);
             //console.log('option made');
             optionButton.onClick((user) => {
                 //console.log('option button pressed, ',this.answersFromUsers[j]);
-                if (this.answersFromUsers[j] !== null) {
-                    return;
-                }
-                //console.log(this.correct);
-                //console.log(i,this.correct[j]);
-                if (i === this.correct[j] - 1) {
-                    this.answeredCorrectly(j, prop, option);
-                }
-                else {
-                    this.answeredWrong(j, prop, option);
-                }
-                // check if I should open door
-                let numberOfAnswers = 0;
-                this.answersFromUsers.map((value) => {
-                    if (value) {
-                        numberOfAnswers++;
-                    }
-                });
-                if (numberOfAnswers > 5) {
-                    //this.door.openDoor();
-                }
-                /*const userThatJustAnswered = this.usersAnswered.find(value => value.user === user.id);
-                if (userThatJustAnswered === undefined){
-                    this.usersAnswered.push({user:user.id,number:1});
-                } else {
-                    userThatJustAnswered.number++;
-                    //console.log(userThatJustAnswered.number);
-                    if (userThatJustAnswered.number>5){ //after 6 answered question the door will open
-                        if (this.isClosed) {
-                            this.door.openDoor();
-                        }
-                    }
-                }*/
-                //this.usersAnsweredGlobal[j].push(user.id);
+                answerFunction();
             });
         }
+    }
+    remakeButtons(user1) {
+        this.questionActors.map((question, i) => {
+            const questionButton = question.setBehavior(MRE.ButtonBehavior);
+            questionButton.onClick((user2) => {
+                this.handleQuestionButton(user2, question, i);
+            });
+        });
+        for (let i = 0; i < this.answerActors.length; i++) {
+            const tempButton = this.answerActors[i].setBehavior(MRE.ButtonBehavior);
+            tempButton.onClick(this.answerFunction[i]);
+        }
+    }
+    handleQuestionButton(user, question, i) {
+        if (user.properties['altspacevr-roles'] !== "") {
+            user.prompt("Enter your question", true)
+                .then((value) => {
+                if (value.submitted) {
+                    const newQuestion = value.text;
+                    user.prompt("What is the answer? Yes/No?", true)
+                        .then((value2) => {
+                        if (value2.submitted) {
+                            if (/[Yy]es/u.test(value2.text)) {
+                                this.correct[i] = 1;
+                            }
+                            else if (/[Nn]o/u.test(value2.text)) {
+                                this.correct[i] = 2;
+                            }
+                            else {
+                                user.prompt("Sorry I was not able to understand it.");
+                                return;
+                            }
+                            question.enableText({
+                                contents: this.formatText(newQuestion, (3.4), 2),
+                                height: this.globalProp.height,
+                            });
+                            //this.usersAnsweredGlobal = [[],[],[],[],[],[]];
+                            this.answersFromUsers.map((object) => {
+                                if (object) {
+                                    object.destroy();
+                                }
+                            });
+                            this.usersAnswered = [];
+                            this.answersFromUsers = [null, null, null, null, null, null];
+                        }
+                    });
+                }
+            });
+        }
+    }
+    handleAnswerButton(i, j, option) {
+        if (this.answersFromUsers[j] !== null) {
+            return;
+        }
+        //console.log(this.correct);
+        //console.log(i,this.correct[j]);
+        if (i === this.correct[j] - 1) {
+            this.answeredCorrectly(j, this.nextPropG, option);
+        }
+        else {
+            this.answeredWrong(j, this.nextPropG, option);
+        }
+        // check if I should open door
+        let numberOfAnswers = 0;
+        this.answersFromUsers.map((value) => {
+            if (value) {
+                numberOfAnswers++;
+            }
+        });
     }
     answeredCorrectly(questionOrder, prop, option) {
         const symbol = MRE.Actor.CreateFromPrefab(this.context, {
@@ -429,6 +452,77 @@ class MultipleChoice {
         });
         //this.answersFromUsers.push(symbol);
         this.answersFromUsers[questionOrder] = symbol;
+    }
+    startAssignmentButton(position) {
+        this.buttonStart = MRE.Actor.CreatePrimitive(this.assets, {
+            definition: {
+                shape: MRE.PrimitiveShape.Box,
+                dimensions: { x: 1, y: 0.4, z: 0.02 }
+            },
+            addCollider: true,
+            actor: {
+                name: "start",
+                transform: { app: { position: position } },
+            }
+        });
+        this.buttonStart.collider.layer = MRE.CollisionLayer.Default;
+        MRE.Actor.Create(this.context, {
+            actor: {
+                parentId: this.buttonStart.id,
+                transform: {
+                    local: {
+                        position: {
+                            x: 0,
+                            y: 0,
+                            z: -0.04,
+                        }
+                    }
+                },
+                text: {
+                    contents: "Start",
+                    color: { r: .2, g: 0.2, b: 0.2 },
+                    height: 0.2,
+                    anchor: MRE.TextAnchorLocation.MiddleCenter,
+                    pixelsPerLine: 2
+                },
+                appearance: {
+                    enabled: this.notParticipandMask
+                }
+            }
+        });
+        MRE.Actor.Create(this.context, {
+            actor: {
+                parentId: this.buttonStart.id,
+                transform: {
+                    local: {
+                        position: {
+                            x: 0,
+                            y: 0,
+                            z: -0.04,
+                        }
+                    }
+                },
+                text: {
+                    contents: "Started",
+                    color: { r: .2, g: 0.2, b: 0.2 },
+                    height: 0.2,
+                    anchor: MRE.TextAnchorLocation.MiddleCenter,
+                    pixelsPerLine: 2
+                },
+                appearance: {
+                    enabled: this.participantMask
+                }
+            }
+        });
+        const startButton = this.buttonStart.setBehavior(MRE.ButtonBehavior);
+        startButton.onClick((user) => {
+            this.startAssignmentAction(user);
+        });
+    }
+    startAssignmentAction(user) {
+        user.groups.clear();
+        this.participants.push(user.id);
+        user.groups.add(this.groupName);
     }
 }
 exports.default = MultipleChoice;

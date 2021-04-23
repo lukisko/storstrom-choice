@@ -41,14 +41,7 @@ class LearningWorld {
             this.started();
             //this.starSystem.start();
         });
-        /*this.context.onUserJoined((user) => {
-            try{
-                this.board.addButton();
-            } catch (err){
-                //do nothing
-            }
-            
-        });/*
+        /*
         this.context.onUserLeft((user) => {
             this.starSystem.userLeft(user);
         });*/
@@ -62,6 +55,14 @@ class LearningWorld {
             rowHeight: 0.49
         };
         const choice = new multipleChoice_1.default(this.context, this.assets, { x: 0, y: 1, z: 1 }, multipleChoiceProp);
+        this.context.onUserJoined((user) => {
+            try {
+                choice.remakeButtons(user);
+            }
+            catch (err) {
+                //do nothing
+            }
+        });
         //this.board = new Board(this.context, this.assets, { x: 0, y: 0, z: 0 });
     }
     started() {
