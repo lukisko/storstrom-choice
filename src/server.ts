@@ -6,22 +6,22 @@ import App from './app';
 import express from 'express';
 import path from 'path';
 const app = express();
-const port = 3000;
+//const port = 3000;
 app.use(express.urlencoded());
 app.use(express.json());
 
 app.get('/change', (req: any, res: any) => {
-  res.sendFile(path.join(__dirname + '/index2.html'));
+	res.sendFile(path.join(__dirname + '/index2.html'));
 });
 
 app.post('/post',(req: any,res: any)=>{
-    //console.log("I got",req.body)
-    res.send('saved');
+	//console.log("I got",req.body)
+	res.send('saved');
 });
 
-app.listen(port, () => {
-  //console.log(`Example app listening at http://localhost:${port}`)
-});
+//app.listen(port, () => {
+//console.log(`Example app listening at http://localhost:${port}`)
+//});
 
 // add some generic error handlers here, to log any exceptions we're not expecting
 //process.on('uncaughtException', err => console.log('uncaughtException', err));

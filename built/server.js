@@ -29,7 +29,7 @@ const app_1 = __importDefault(require("./app"));
 const express_1 = __importDefault(require("express"));
 const path_2 = __importDefault(require("path"));
 const app = express_1.default();
-const port = 3000;
+//const port = 3000;
 app.use(express_1.default.urlencoded());
 app.use(express_1.default.json());
 app.get('/change', (req, res) => {
@@ -39,9 +39,9 @@ app.post('/post', (req, res) => {
     //console.log("I got",req.body)
     res.send('saved');
 });
-app.listen(port, () => {
-    //console.log(`Example app listening at http://localhost:${port}`)
-});
+//app.listen(port, () => {
+//console.log(`Example app listening at http://localhost:${port}`)
+//});
 // add some generic error handlers here, to log any exceptions we're not expecting
 //process.on('uncaughtException', err => console.log('uncaughtException', err));
 //process.on('unhandledRejection', reason => console.log('unhandledRejection', reason));

@@ -62,6 +62,13 @@ class LearningWorld {
             rowHeight: 0.49
         };
         const choice = new multipleChoice_1.default(this.context, this.assets, { x: 0, y: 1, z: 1 }, multipleChoiceProp);
+        this.context.onUserJoined((user) => {
+            choice.userJoined(user);
+            choice.loadData(user);
+        });
+        this.context.onStopped(() => {
+            choice.save();
+        });
         //this.board = new Board(this.context, this.assets, { x: 0, y: 0, z: 0 });
     }
     started() {

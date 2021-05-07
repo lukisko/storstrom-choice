@@ -1,4 +1,4 @@
-	import * as MRE from '@microsoft/mixed-reality-extension-sdk';
+import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 //import groupMask from './groupMask';
 //import Board from './interactiveBoard';
 //import WearHat from "./wearHat";
@@ -40,6 +40,7 @@ export default class LearningWorld {
 		this.context.onUserLeft((user) => {
 			this.starSystem.userLeft(user);
 		});*/
+		
 		const multipleChoiceProp: MultipleChoiceProp = {
 			numberOfOptions: 5,
 			//correctAnswer: 5,
@@ -51,6 +52,14 @@ export default class LearningWorld {
 		}
 		const choice = new MultipleChoice(this.context, this.assets,
 			{ x: 0, y: 1, z: 1 }, multipleChoiceProp);
+
+		this.context.onUserJoined((user)=>{
+			choice.userJoined(user);
+			choice.loadData(user);
+		})
+		this.context.onStopped(()=>{
+			choice.save();
+		})
 		//this.board = new Board(this.context, this.assets, { x: 0, y: 0, z: 0 });
 
 	}

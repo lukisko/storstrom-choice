@@ -1,6 +1,8 @@
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 //import Door from './openingDoor';
 //import openingDoor from "./openingDoor";
+import fs	 from "fs";
+import request from 'request';
 
 export type MultipleChoiceProp = {
 	numberOfOptions: number;
@@ -12,6 +14,12 @@ export type MultipleChoiceProp = {
 	rowHeight: number;
 }
 
+type storedQuestions = {
+	[worldId: string]: {
+		[sessionId: string]: {question: string[];answer: number[]};
+	};
+}
+
 const charPerM = 17;
 
 export default class MultipleChoice {
@@ -20,6 +28,13 @@ export default class MultipleChoice {
 	private centerPosition: MRE.Vector3Like;
 	private centerRotation: MRE.QuaternionLike;
 	private localSpace: MRE.Actor;
+
+	private readonly groupName = "PARTICIPANT";
+	private readonly noGroupName = "NOT-PARTICIPANT";
+	private participantMask: MRE.GroupMask;
+	private notParticipandMask: MRE.GroupMask;
+	private participants: MRE.Guid[];
+	private buttonStart: MRE.Actor;
 	//private door: openingDoor;
 	private isClosed: boolean;
 	private correctAnswer: number;
@@ -28,6 +43,12 @@ export default class MultipleChoice {
 	private tickPrefab: MRE.Asset[];
 	private XPrefab: MRE.Asset[];
 	private answersFromUsers: MRE.Actor[];
+	private prop: MultipleChoiceProp;
+	data: storedQuestions;
+	private sessionData: {question: string[]; answer: number[]};
+
+	private worldId: string;
+	private participantsWithStar: MRE.Guid[];
 	//private usersAnsweredGlobal: MRE.Guid[][];
 
 	constructor(context: MRE.Context, assets: MRE.AssetContainer,
@@ -40,34 +61,28 @@ export default class MultipleChoice {
 		this.usersAnswered = [];
 		//this.usersAnsweredGlobal = [[],[],[],[],[],[]];
 		this.isClosed = true;
-		/*this.door = new Door(this.context, this.assets, {
-			x: this.centerPosition.x + 8.285-1,
-			y: this.centerPosition.y - 1,
-			z: this.centerPosition.z - 6.242-1
-		});*/
+
+		this.participants = [];
+		this.participantsWithStar = [];
+
+		this.participantMask = new MRE.GroupMask(context,[this.groupName]);
+		this.notParticipandMask = new MRE.GroupMask(context,[this.noGroupName]);
+		
 		this.answersFromUsers = [null,null,null,null,null,null];
 		//this.creatIt(prop);
-		const questions = [
-			"Enter your question","Enter your question","Enter your question",
-			"Enter your question","Enter your question","Enter your question"
-		]
-		/*[
-			"Was the Soviet Union part of the Allied forces?",
-			"Did America liberate France during WWII?",
-			"Was China part of the Pearl Harbor Attack?",
-			"Did Hitler get executed?",
-			"Did Hitler’s nephew write a magazine article title \n‘Why I hate my Uncle’?",
-			"The term “D-Day” refers to the invasion of Normandy \nthe 6 June 1944?",
-		];*/
-		this.correct = [
-			1,2,2,2,1,1
-		];
-		this.createQuestions(questions,this.correct,prop);
+		this.prop = prop;
+		//console.log("-1");
+		this.startAssignmentButton({x:0,y:2,z:0});
+		//this.createQuestions(questions,this.correct,prop);
+		
 	}
 
 	private async createQuestions(questions: string[], correct: number[], prop: MultipleChoiceProp){
+		//console.log("0");
 		this.tickPrefab = await this.assets.loadGltf("tick.gltf","mesh");
+		//console.log("0.5");
 		this.XPrefab = await this.assets.loadGltf('X.gltf',"mesh");
+		//console.log("1");
 
 		const blackColour = this.assets.createMaterial("black",{
 			color:{r:0,g:0,b:0,a:1}
@@ -142,6 +157,8 @@ export default class MultipleChoice {
 			}
 		});
 
+		//console.log("2");
+
 		MRE.Actor.CreatePrimitive(this.assets, {//-----------------------------------
 			definition:{
 				shape:MRE.PrimitiveShape.Box,
@@ -180,8 +197,6 @@ export default class MultipleChoice {
 				}
 			}
 		});
-
-		let extraLines = 0;
 		
 		for (let i = 0; i< questions.length; i++){
 			const tempX = this.centerPosition.x;
@@ -232,10 +247,6 @@ export default class MultipleChoice {
 				}
 			});
 
-			if (questions[i].length>60){
-				extraLines++;
-			}
-
 			const nextProp: MultipleChoiceProp = {
 				numberOfOptions:2,
 				padding:prop.padding,
@@ -259,13 +270,18 @@ export default class MultipleChoice {
 								if (value2.submitted){
 									if (/[Yy]es/u.test(value2.text)){
 										this.correct[i] = 1;
+										this.sessionData.answer[i] = 1;
 									} else if (/[Nn]o/u.test(value2.text)){
 										this.correct[i] = 2;
+										this.sessionData.answer[i] = 2;
+									} else {
+										return;
 									}
 									question.enableText({
 										contents:this.formatText(newQuestion,(3.4),2),
 										height:prop.height,
 									});
+									this.sessionData.question[i] = newQuestion;
 									//this.usersAnsweredGlobal = [[],[],[],[],[],[]];
 									this.answersFromUsers.map((object)=>{
 										if (object){
@@ -306,10 +322,6 @@ export default class MultipleChoice {
 	}
 
 	private creatIt(prop: MultipleChoiceProp, questionPosition: MRE.Vector3Like,j: number) {
-		const usersAnsweredLocal: MRE.Guid[] = [];
-		const textureTry = this.assets.createTexture("sunglases",{
-			uri:"2-2-sunglasses-picture.png",
-		});
 		const transparent = this.assets.createMaterial("transparent", {
 			color: { r: 0.2, g: 0.2, b: 0, a: 0.2 },
 			//mainTextureId: textureTry.id
@@ -380,8 +392,8 @@ export default class MultipleChoice {
 			const optionButton = option.setBehavior(MRE.ButtonBehavior);
 			//console.log('option made');
 			optionButton.onClick((user) => {
-				//console.log('option button pressed, ',this.answersFromUsers[j]);
-				if (this.answersFromUsers[j]!==null) {
+				//console.log('option button pressed, ',this.answersFromUsers[j]); 
+				if (this.answersFromUsers[j]!==null || !this.participants.includes(user.id)) {
 					return;
 				}
 				//console.log(this.correct);
@@ -403,25 +415,47 @@ export default class MultipleChoice {
 
 				if (numberOfAnswers>5){
 					//this.door.openDoor();
+					this.attachStarToThese(this.participants);
 				}
-
-				/*const userThatJustAnswered = this.usersAnswered.find(value => value.user === user.id);
-				if (userThatJustAnswered === undefined){
-					this.usersAnswered.push({user:user.id,number:1});
-				} else {
-					userThatJustAnswered.number++;
-					//console.log(userThatJustAnswered.number);
-					if (userThatJustAnswered.number>5){ //after 6 answered question the door will open
-						if (this.isClosed) {
-							this.door.openDoor();
-						}
-					}
-				}*/
-				
-				//this.usersAnsweredGlobal[j].push(user.id);
 				
 			});
 		}
+	}
+
+	public loadData(user: MRE.User){
+		//return;
+		//console.log(1);
+		if (this.correct){
+			return;
+		}
+		
+		this.data = require('../public/questionData.json');
+		//console.log(this.data);
+		
+		this.worldId = user.properties['altspacevr-space-id'];
+		let questions;
+		try {
+			const info = this.data[this.worldId][this.context.sessionId];
+			questions = info.question;
+			this.correct = info.answer;
+			//console.log(info);
+		} catch (e) {
+			questions = [
+				"Enter your question","Enter your question","Enter your question",
+				"Enter your question","Enter your question","Enter your question"
+			];
+			this.correct = [
+				1,2,2,2,1,1
+			];
+			if (!this.data[this.worldId]){
+				this.data[this.worldId] = {};
+			}
+			this.data[this.worldId][this.context.sessionId] = {question: questions ,answer:this.correct}
+		}
+
+		this.sessionData = {question: questions, answer: this.correct};
+		
+		this.createQuestions(questions,this.correct,this.prop);
 	}
 
 	private answeredCorrectly(questionOrder: number, prop: MultipleChoiceProp, option: MRE.Actor) {
@@ -473,4 +507,141 @@ export default class MultipleChoice {
 		//this.answersFromUsers.push(symbol);
 		this.answersFromUsers[questionOrder] = symbol;
 	}
+
+	public userJoined(user: MRE.User){
+
+		user.groups.clear();
+		user.groups.add(this.noGroupName);
+		/*if (this.buttonStart){
+			const startButton = this.buttonStart.setBehavior(MRE.ButtonBehavior);
+			startButton.onClick((user2)=>{
+				this.startAssignmentAction(user2);
+			});
+		}*/
+	}
+
+	private startAssignmentButton(position: MRE.Vector3Like){
+		this.buttonStart = MRE.Actor.CreatePrimitive(this.assets,{
+			definition: {
+				shape: MRE.PrimitiveShape.Box,
+				dimensions:{ x: 1, y: 0.4, z: 0.02}
+			},
+			addCollider:true,
+			actor:{
+				name:"start",
+				transform:{app:{position:position}},
+			}
+		});
+		this.buttonStart.collider.layer = MRE.CollisionLayer.Default;
+
+		MRE.Actor.Create(this.context, {
+			actor: {
+				parentId: this.buttonStart.id,
+				transform: {
+					local: {
+						position: {
+							x: 0,
+							y: 0,
+							z: -0.04,
+						}
+					}
+				},
+				text: {
+					contents: "Start",
+					color: { r: .2, g: 0.2, b: 0.2 },
+					height: 0.2,
+					anchor: MRE.TextAnchorLocation.MiddleCenter,
+					pixelsPerLine: 2
+				},
+				appearance:{
+					enabled: this.notParticipandMask
+				}
+			}
+		});
+
+		MRE.Actor.Create(this.context, {
+			actor: {
+				parentId: this.buttonStart.id,
+				transform: {
+					local: {
+						position: {
+							x: 0,
+							y: 0,
+							z: -0.04,
+						}
+					}
+				},
+				text: {
+					contents: "Started",
+					color: { r: .2, g: 0.2, b: 0.2 },
+					height: 0.2,
+					anchor: MRE.TextAnchorLocation.MiddleCenter,
+					pixelsPerLine: 2
+				},
+				appearance:{
+					enabled: this.participantMask
+				}
+			}
+		});
+
+		const startButton = this.buttonStart.setBehavior(MRE.ButtonBehavior);
+		startButton.onClick((user)=>{
+			this.startAssignmentAction(user);
+		});
+	}
+
+	private startAssignmentAction(user: MRE.User){
+		user.groups.clear();
+		this.participants.push(user.id);
+		user.groups.add(this.groupName);
+	}
+
+	private attachStarToThese(users: MRE.Guid[]){
+		if (!this.worldId){
+			try {
+				this.worldId = this.context.users[0].properties['altspacevr-space-id'];
+			} catch {
+				return;
+			}
+		}
+		users.map((user: MRE.Guid) => {
+			if (this.participantsWithStar.includes(user)){
+				return;
+			}
+			//console.log("send to server", this.worldId);
+			const userUser = this.context.user(user);
+			//console.log(userUser.context,userUser.internal,userUser.properties);
+			request.post(
+				'https://storstrom-server.herokuapp.com/add',
+				{
+					json: {
+						sessionId: this.worldId,
+						userName: userUser.name,
+						userIp : userUser.properties['remoteAddress']
+					}
+				},
+				(err, res, body) => {
+					if (err) {
+						//console.log(err);
+						return;
+					}
+					
+					//console.log(res.body);
+				}
+			);
+			this.participantsWithStar.push(user);
+		});
+	}
+	public save() {
+		const tempBuffer = fs.readFileSync("./public/questionData.json", 'utf-8');
+		const tempData: storedQuestions = JSON.parse(tempBuffer);
+		tempData[this.worldId][this.context.sessionId] = this.sessionData;
+		const dataToWrite = JSON.stringify(tempData, null, 2);
+		fs.writeFile("./public/questionData.json", dataToWrite, () => { });
+		//console.log("write finished");
+	}
+
+	
 }
+
+
