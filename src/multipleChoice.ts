@@ -414,8 +414,11 @@ export default class MultipleChoice {
 				});
 
 				if (numberOfAnswers>5){
-					//this.door.openDoor();
-					this.attachStarToThese(this.participants);
+					//check if every question is answered
+					const correct = this.answersFromUsers.filter((value) =>{ return value.name==="correct"});
+					if (correct.length>5){ // count how many are correct
+						this.attachStarToThese(this.participants);
+					}
 				}
 				
 			});
@@ -462,6 +465,7 @@ export default class MultipleChoice {
 		const symbol = MRE.Actor.CreateFromPrefab(this.context, {
 			firstPrefabFrom:this.tickPrefab,
 			actor: {
+				name:"correct",
 				parentId: option.id,
 				//exclusiveToUser: user.id,
 				transform: {
@@ -489,6 +493,7 @@ export default class MultipleChoice {
 		const symbol = MRE.Actor.CreateFromPrefab(this.context, {
 			firstPrefabFrom:this.XPrefab,
 			actor: {
+				name:"incorrect",
 				parentId: option.id,
 				//exclusiveToUser: user.id,
 				transform: {
@@ -597,6 +602,7 @@ export default class MultipleChoice {
 	}
 
 	private attachStarToThese(users: MRE.Guid[]){
+		console.log("I am going to send something to server");
 		if (!this.worldId){
 			try {
 				this.worldId = this.context.users[0].properties['altspacevr-space-id'];

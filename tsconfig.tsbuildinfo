@@ -1202,7 +1202,7 @@
         "affectsGlobalScope": false
       },
       "./src/multipleChoice.ts": {
-        "version": "2f4445b3fc32a3d35988eb68e48a3ac3eb5832cff110a3c4a468252c3e11d4a5",
+        "version": "cd4f269c91cf31bbf4e67a653a53e9763d389db4638e4dc41ac1de2897716557",
         "signature": "7933d338f371ae156ad4fb187eaba831e00abbe9749f927a0eb2003445af24c6",
         "affectsGlobalScope": false
       },
@@ -1289,6 +1289,8 @@
       "strictNullChecks": false,
       "moduleResolution": 2,
       "esModuleInterop": true,
+      "watch": true,
+      "preserveWatchOutput": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
