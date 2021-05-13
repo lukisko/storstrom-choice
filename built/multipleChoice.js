@@ -535,7 +535,7 @@ class MultipleChoice {
         user.groups.add(this.groupName);
     }
     attachStarToThese(users) {
-        console.log("I am going to send something to server");
+        //console.log("I am going to send something to server");
         if (!this.worldId) {
             try {
                 this.worldId = this.context.users[0].properties['altspacevr-space-id'];
