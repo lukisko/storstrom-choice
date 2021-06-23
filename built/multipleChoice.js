@@ -48,7 +48,7 @@ class MultipleChoice {
         //this.creatIt(prop);
         this.prop = prop;
         //console.log("-1");
-        this.startAssignmentButton({ x: 0, y: 2, z: 0 });
+        this.startAssignmentButton({ x: -3.7, y: 2, z: this.centerPosition.z });
         //this.createQuestions(questions,this.correct,prop);
     }
     async createQuestions(questions, correct, prop) {
@@ -393,7 +393,7 @@ class MultipleChoice {
                 "Enter your question", "Enter your question", "Enter your question"
             ];
             this.correct = [
-                1, 2, 2, 2, 1, 1
+                1, 1, 1, 1, 1, 1
             ];
             if (!this.data[this.worldId]) {
                 this.data[this.worldId] = {};
@@ -456,18 +456,18 @@ class MultipleChoice {
     userJoined(user) {
         user.groups.clear();
         user.groups.add(this.noGroupName);
-        /*if (this.buttonStart){
+        if (this.buttonStart) {
             const startButton = this.buttonStart.setBehavior(MRE.ButtonBehavior);
-            startButton.onClick((user2)=>{
+            startButton.onClick((user2) => {
                 this.startAssignmentAction(user2);
             });
-        }*/
+        }
     }
     startAssignmentButton(position) {
         this.buttonStart = MRE.Actor.CreatePrimitive(this.assets, {
             definition: {
                 shape: MRE.PrimitiveShape.Box,
-                dimensions: { x: 1, y: 0.4, z: 0.02 }
+                dimensions: { x: 0.8, y: 0.4, z: 0.06 }
             },
             addCollider: true,
             actor: {

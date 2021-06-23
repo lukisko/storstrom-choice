@@ -1202,7 +1202,7 @@
         "affectsGlobalScope": false
       },
       "./src/multipleChoice.ts": {
-        "version": "0558c8b6a47a102512e825f46f8db8156a5a2c8f14591fe7652a9e8b9c3e77bd",
+        "version": "2832e9f2d9145dfb7b7eb06a0e7582b9e78a342a9f8166a9ac22fd78fd1ebe3e",
         "signature": "7933d338f371ae156ad4fb187eaba831e00abbe9749f927a0eb2003445af24c6",
         "affectsGlobalScope": false
       },

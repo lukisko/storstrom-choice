@@ -72,7 +72,7 @@ export default class MultipleChoice {
 		//this.creatIt(prop);
 		this.prop = prop;
 		//console.log("-1");
-		this.startAssignmentButton({x:0,y:2,z:0});
+		this.startAssignmentButton({x:-3.7,y:2,z:this.centerPosition.z});
 		//this.createQuestions(questions,this.correct,prop);
 		
 	}
@@ -415,7 +415,7 @@ export default class MultipleChoice {
 
 				if (numberOfAnswers>5){
 					//check if every question is answered
-					const correct = this.answersFromUsers.filter((value) =>{ return value.name==="correct"});
+					const correct = this.answersFromUsers.filter((value) =>{ return value.name==="correct" });
 					if (correct.length>5){ // count how many are correct
 						this.attachStarToThese(this.participants);
 					}
@@ -448,7 +448,7 @@ export default class MultipleChoice {
 				"Enter your question","Enter your question","Enter your question"
 			];
 			this.correct = [
-				1,2,2,2,1,1
+				1,1,1,1,1,1
 			];
 			if (!this.data[this.worldId]){
 				this.data[this.worldId] = {};
@@ -517,19 +517,19 @@ export default class MultipleChoice {
 
 		user.groups.clear();
 		user.groups.add(this.noGroupName);
-		/*if (this.buttonStart){
+		if (this.buttonStart){
 			const startButton = this.buttonStart.setBehavior(MRE.ButtonBehavior);
 			startButton.onClick((user2)=>{
 				this.startAssignmentAction(user2);
 			});
-		}*/
+		}
 	}
 
 	private startAssignmentButton(position: MRE.Vector3Like){
 		this.buttonStart = MRE.Actor.CreatePrimitive(this.assets,{
 			definition: {
 				shape: MRE.PrimitiveShape.Box,
-				dimensions:{ x: 1, y: 0.4, z: 0.02}
+				dimensions:{ x: 0.8, y: 0.4, z: 0.06}
 			},
 			addCollider:true,
 			actor:{
